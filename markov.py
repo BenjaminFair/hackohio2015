@@ -20,6 +20,10 @@ class Markov():
     msg = []
     if ngram is None:
       ngram = [''] * self.length
+    else:
+      for m in ngram:
+        if m != '':
+          msg.append(m)
     for i in xrange(max):
       try:
         next = random.choice(self.data[tuple(ngram)])
@@ -32,3 +36,9 @@ class Markov():
       ngram.append(next)
 
     return ' '.join(msg)
+
+m = Markov(2)
+with open('lines.txt') as f:
+  for line in f:
+    m.add(line)
+
