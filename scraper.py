@@ -5,11 +5,11 @@ from sets import Set
 
 OUTFILE = 'xkcd_transcripts'
 
-blacklist = Set([404,1002, 1005, 1007, 1011])
+blacklist = Set([404])
 
 os.system('rm -f '+OUTFILE)
 
-for i in range(1, 1589):
+for i in range(1, 1604):
 
   if i in blacklist:
     continue
