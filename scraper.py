@@ -9,7 +9,7 @@ blacklist = Set([404,1002, 1005, 1007, 1011])
 
 os.system('rm -f '+OUTFILE)
 
-for i in range(1500, 1589):
+for i in range(1, 1589):
 
   if i in blacklist:
     continue
@@ -30,7 +30,7 @@ for i in range(1500, 1589):
       for line in file:
 # Find lines with speaker:
         if re.match('.*?: ', line):
-          print line,
+#          print line,
 # Remove speaker: statements
           line = re.sub('.*?: ', '', line, count=1)
 	  if line and line!='\n':
