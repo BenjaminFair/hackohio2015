@@ -1,5 +1,9 @@
+# some code from sadface by Benjamin Keith (ben@benlk.com)
+#     https://github.com/benlk/sadface
+
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
+import re
 
 class xkcdBot(irc.IRCClient):
   def _get_nickname(self):
@@ -15,7 +19,11 @@ class xkcdBot(irc.IRCClient):
     self.msg(channel, "Hai everyone!")
 
   def privmsg(self, user, channel, msg):
-    pass
+    user_nick = user.split('!', 1)[0]
+    if self.nickname in msg:
+      msg = re.compile(self.nickname + "[:,]* ?", re.I).sub('', msg)
+      reply = user_nick + ": " + self.factory.generator(msg)
+      self.msg(channel, reply)
 
 class xkcdBotFactory(protocol.ClientFactory):
   protocol = xkcdBot
@@ -33,7 +41,10 @@ class xkcdBotFactory(protocol.ClientFactory):
     print "Failed to connect: %s." % (reason,)
     quit()
 
-if __name__ == "__main__":
-  factory = xkcdBotFactory("#bottest", "benjbot", None)
-  reactor.connectTCP("irc.freenode.net", 6667, factory)
+def Run(host, port, channel, nickname, generator):
+  factory = xkcdBotFactory(channel, nickname, generator)
+  reactor.connectTCP(host, port, factory)
   reactor.run()
+
+if __name__ == "__main__":
+  Run("irc.freenode.net", 6667, "#bottest", "benjbot", None)
