@@ -1,3 +1,6 @@
+# The implementation of Markov chains is inspired by the one in sadface by
+# Benjamin Keith (ben@benlk.com) at https://github.com/benlk/sadface
+
 import random
 from collections import defaultdict
 
@@ -24,23 +27,27 @@ class Markov():
       for line in file:
         self.add(line)
 
-  def gen(self, start="", max=40):
-    ngram = start.split(' ')
-    if len(ngram) < self.length:
-      ngram = [''] * (self.length - len(ngram)) + ngram
-    msg = [word for word in ngram if word != '']
-    for i in xrange(max):
-      try:
-        next = random.choice(self.data[tuple(ngram)])
-      except IndexError:
-        continue
-      if next == self.STOP:
-        break
-      msg.append(next)
-      del ngram[0]
-      ngram.append(next)
+  def gen(self, start="", max=60):
+    l = max+1
+    while l > max:
+      ngram = start.split(' ')
+      if len(ngram) < self.length:
+        ngram = [''] * (self.length - len(ngram)) + ngram
+        msg = [word for word in ngram if word != '']
+      for i in xrange(max):
+        try:
+          next = random.choice(self.data[tuple(ngram)])
+        except IndexError:
+          continue
+        if next == self.STOP:
+          break
+        msg.append(next)
+        del ngram[0]
+        ngram.append(next)
+      out = ' '.join(msg)
+      l = len(out)
 
-    return ' '.join(msg)
+    return out
 
 if __name__ == "__main__":
   m = Markov(2, "lines.txt")
