@@ -24,7 +24,7 @@ i = image_maker_glue.ImageMakerGlue("movie_lines.txt")
 class Simple(resource.Resource):
   isLeaf = True
   def __init__(self):
-    self.i = image_maker_glue.ImageMakerGlue("movie_lines.txt")
+    self.i = image_maker_glue.ImageMakerGlue("movie_lines.clean.txt")
   def render_GET(self, request):
     return HTML
   def render_POST(self, request):

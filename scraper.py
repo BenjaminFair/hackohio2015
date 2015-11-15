@@ -4,29 +4,34 @@ import pykcd, io, re, os, string
 from sets import Set
 
 OUTFILE = 'xkcd_transcripts'
+TMPFILE = 'tmp'
+NEWEST = 1604
 
 blacklist = Set([404])
 
-os.system('rm -f '+OUTFILE)
+try:
+  os.unlink(OUTFILE)
+except OSError:
+  pass
 
-for i in range(1, 1604):
+for i in range(1, NEWEST):
 
   if i in blacklist:
     continue
 
-  out = 'Getting Transcript for ' + str(i)
-  print out
+  print 'Getting Transcript for ' + str(i)
 
   strip = pykcd.XKCDStrip(i)
 
 # Remove scene descriptions [[*]] and alt text {{*}}
   trans = re.sub('[\[{(]+.+?[\]})]+', '', strip.transcript, flags=re.DOTALL)
-
-  with io.open('tmp','w') as file:
+  trans = trans.encode('ascii', 'ignore')
+#  print trans,
+  with open(TMPFILE,'w') as file:
     file.write(trans)
 
-  with io.open('tmp','r') as file:
-    with io.open(OUTFILE,'a') as file2:
+  with open(TMPFILE,'r') as file:
+    with open(OUTFILE,'a') as file2:
       for line in file:
 # Find lines with speaker:
         if re.match('.*?: ', line):
@@ -36,4 +41,4 @@ for i in range(1, 1604):
 	  if line and line!='\n':
             file2.write(line)
 
-  os.system('rm -f tmp')
+  os.unlink(TMPFILE)
