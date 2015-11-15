@@ -1,16 +1,10 @@
 from PIL import Image, ImageDraw, ImageFont
-import sys
+import sys, random
 
-comicNum = 1603
+import image_data as dat
+
 fontHeight = 20
 font = ImageFont.truetype("xkcd.ttf", fontHeight)
-#x and y coordinates of upper-left + bottom-right vertex of rectangle
-x = [4, 186, 100, 186, 195, 357, 197, 327, 247, 340, 564, 727, 624, 731, 583, 678]
-y = [11, 69, 135, 153,  10,  66,  77, 115, 129, 145,   8,  47,  57,  95, 115, 154]
-color = [255, 255, 255, 255, 255, 0, 0, 0]
-maxCharOnLine = 0
-offset = 0
-textStr = "QWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPSDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKL" 
 
 def maxCharPerLine(width):
   return int(round((width/8.33),0))
@@ -19,17 +13,19 @@ def getMaxLines(height):
   return height/fontHeight+1
 
 def pick():
-  returnThis = []
+  comic = random.choice(dat.getComics())
+  x, y, color = dat.getData(comic)
+  lengths = []
   for z in range(0, len(x), 2):
     maxLines = getMaxLines(y[z+1]-y[z])
     cpl = maxCharPerLine(x[z+1]-x[z])
-    print maxLines, cpl
     maxChar = cpl*maxLines
-    returnThis.append(maxChar)
-  return (comicNum, returnThis)
+    lengths.append(maxChar)
+  return (comic, lengths)
 
 def make(comic, dialog):
-  im = Image.open("%d.png" % comic)
+  x, y, color = dat.getData(comic)
+  im = Image.open("images/%d.png" % comic)
   draw = ImageDraw.Draw(im)
   for n in range(0, len(x), 2):
     maxLines = getMaxLines(y[n+1]-y[n])
