@@ -17,6 +17,7 @@ class ImageMakerGlue():
     dialog = []
     for l in lengths:
       dialog.append(self.m.gen(msg, l))
+      msg = ''
     print dialog
     file_name = image_maker.make(comic, dialog)
     link = str(self.client.upload_from_path(file_name)["link"])
