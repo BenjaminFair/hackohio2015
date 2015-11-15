@@ -1,7 +1,7 @@
 # The implementation of Markov chains is inspired by the one in sadface by
 # Benjamin Keith (ben@benlk.com) at https://github.com/benlk/sadface
 
-import random
+import random, string
 from collections import defaultdict
 
 class Markov():
@@ -16,7 +16,8 @@ class Markov():
 
   def add(self, msg):
     ngram = [''] * self.length
-    for w in msg.split():
+    for x in msg.split():
+      w = string.lower(x)
       self.data[tuple(ngram)].append(w)
       del ngram[0]
       ngram.append(w)
@@ -30,10 +31,12 @@ class Markov():
   def gen(self, start="", max=60):
     l = max+1
     while l > max:
-      ngram = start.split(' ')
+      startWords = start.split(' ')
+      startWords = startWords[0:min(len(startWords), self.length)]
+      ngram = [word.lower() for word in startWords]
       if len(ngram) < self.length:
         ngram = [''] * (self.length - len(ngram)) + ngram
-        msg = [word for word in ngram if word != '']
+      msg = [word for word in ngram if word != '']
       for i in xrange(max):
         try:
           next = random.choice(self.data[tuple(ngram)])

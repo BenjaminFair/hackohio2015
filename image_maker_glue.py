@@ -8,7 +8,9 @@ import image_maker
 class ImageMakerGlue():
   def __init__(self, file):
     self.m = markov.Markov(2, file)
+    print "Loaded corpus"
     self.client = ImgurClient(keys.imgur_client_id, keys.imgur_client_secret)
+    print "Connected to Imgur"
 
   def gen(self, msg, max=None):
     comic, lengths = image_maker.pick()
