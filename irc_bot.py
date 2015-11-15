@@ -42,6 +42,8 @@ class ircBotFactory(protocol.ClientFactory):
     quit()
 
 def Run(host, port, channel, nickname, generator):
+  print "Starting IRC bot..."
+
   factory = ircBotFactory(channel, nickname, generator)
   reactor.connectTCP(host, port, factory)
   reactor.run()
