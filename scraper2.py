@@ -22,7 +22,7 @@ with open(INFILE, 'r') as ifile:
       line = re.sub('<.*?>', '', line)
       line = re.sub('\+\+\+\$\+\+\+ *', '', line)
       for word in badwords:
-        line = re.sub(word, word[0]+'-'*(len(word)-1), line)
+        line = re.sub(' '+word+' ', ' '+word[0]+'-'*(len(word)-1)+' ', line)
       nline = ''
       for ch in line:
         if ch in string.uppercase or ch in string.digits or ch in spcl_set:
