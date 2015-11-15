@@ -3,46 +3,43 @@ import sys
 
 comicNum = 1603
 fontHeight = 19
+font = ImageFont.truetype("xkcd.ttf", fontHeight)
 #x and y coordinates of upper-left + bottom-right vertex of rectangle
 x = [4, 186]
 y = [11, 69]
-totLines = 0
 maxCharOnLine = 0
 offset = 0
 textStr = "QWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPSDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKL" 
 
+def maxCharPerLine(width):
+  return int(round((width/8.33),0)-3)
 
 def pick():
   returnThis = []
   for z in range(0, len(x)/2):
     maxLines = int(round((y[z+1]-y[z])/fontHeight,0))
-    maxCharOnLine = int(round(((x[z+1]-x[z])/9),0)-totLines)
+    print maxLines
+    cpl = maxCharPerLine(x[z+1]-x[z])
     print maxCharOnLine  
-    maxChar = maxCharOnLine*maxLines
+    maxChar = cpl*maxLines
     returnThis.append(maxChar)
   return (comicNum, returnThis)
 
 def make(comic, dialog):
-  for text in dialog:    
-    totLines = len(text)
-    im = Image.open("%d.png" % comicNum)
+  for n in range(len(dialog)):
+    text = dialog[n]
+    cpl = maxCharPerLine(x[n+1]-x[n])
+    totLines = len(text)/cpl+1
+    print totLines
+    im = Image.open("%d.png" % comic)
     draw = ImageDraw.Draw(im)
-    font = ImageFont.truetype("xkcd.ttf", fontHeight)
 
     #fills rectangle of solid cover over text
-    for c in range(0, len(x)/2):
-      draw.rectangle([(x[c],y[c]),(x[c+1],y[c+1])], fill=255, outline=None)
+    draw.rectangle([(x[n],y[n]),(x[n+1],y[n+1])], fill=255, outline=None)
 
     #writes new text at given position
-    xCtr=0
-    yCtr=0
-    loops=0
-    maxCharOnLine = int(maxCharOnLine)
-
-    for v in range(0, int(totLines)):
-      for b in range(0, len(x)/2):
-        draw.text((x[b],y[b]), text[v*maxCharOnLine:(maxCharOnLine*(v+1))], font=font)
-        y[b]+=fontHeight
+    for v in range(0, totLines):      
+      draw.text((x[n],y[n]+fontHeight*v), text[cpl*v:(cpl*(v+1))], font=font)
     del draw
     # write to stdout
     with open("out.png", 'w') as f:
