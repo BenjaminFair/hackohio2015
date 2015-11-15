@@ -1,5 +1,5 @@
-# some code from sadface by Benjamin Keith (ben@benlk.com)
-#     https://github.com/benlk/sadface
+# Some code adapted from sadface by Benjamin Keith (ben@benlk.com)
+# at https://github.com/benlk/sadface
 
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor

@@ -1,3 +1,6 @@
+# The implementation of Markov chains is inspired by the one in sadface by
+# Benjamin Keith (ben@benlk.com) at https://github.com/benlk/sadface
+
 import random
 from collections import defaultdict
 
