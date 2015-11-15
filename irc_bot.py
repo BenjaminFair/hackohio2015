@@ -5,7 +5,7 @@ from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 import re
 
-class xkcdBot(irc.IRCClient):
+class ircBot(irc.IRCClient):
   def _get_nickname(self):
     return self.factory.nickname
   nickname = property(_get_nickname)
@@ -25,8 +25,8 @@ class xkcdBot(irc.IRCClient):
       reply = user_nick + ": " + self.factory.generator(msg)
       self.msg(channel, reply)
 
-class xkcdBotFactory(protocol.ClientFactory):
-  protocol = xkcdBot
+class ircBotFactory(protocol.ClientFactory):
+  protocol = ircBot
 
   def __init__(self, channel, nick, generator):
     self.channel = channel
@@ -42,7 +42,7 @@ class xkcdBotFactory(protocol.ClientFactory):
     quit()
 
 def Run(host, port, channel, nickname, generator):
-  factory = xkcdBotFactory(channel, nickname, generator)
+  factory = ircBotFactory(channel, nickname, generator)
   reactor.connectTCP(host, port, factory)
   reactor.run()
 
