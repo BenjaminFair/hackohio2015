@@ -21,9 +21,7 @@ def pick():
   returnThis = []
   for z in range(0, len(x)/2):
     maxLines = getMaxLines(y[z+1]-y[z])
-    print maxLines
     cpl = maxCharPerLine(x[z+1]-x[z])
-    print maxCharOnLine  
     maxChar = cpl*maxLines
     returnThis.append(maxChar)
   return (comicNum, returnThis)
@@ -32,7 +30,6 @@ def make(comic, dialog):
   for n in range(len(dialog)):
     cpl = maxCharPerLine(x[n+1]-x[n])
     maxLines = getMaxLines(y[n+1]-y[n])
-    print maxLines
     im = Image.open("%d.png" % comic)
     draw = ImageDraw.Draw(im)
 
